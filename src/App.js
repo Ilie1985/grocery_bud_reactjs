@@ -17,6 +17,11 @@ function App() {
     setAlert({ show, type, message });
   };
 
+  const clearList = () => {
+    showAlert(true, "danger", "empty list");
+    setList([]);
+  };
+
   const submitHandler = (e) => {
     e.preventDefault();
 
@@ -24,18 +29,14 @@ function App() {
       //display alert
       showAlert(true, "danger", "please enter value");
       setAlert({ show: true, message: "please enter value", type: "danger" });
-    
-    
-    
-    
     } else if (name && isEditing) {
       //deal with edit
-   
-   
-   
-   
     } else {
       //show alert
+
+      showAlert(true, "success", "item added to the list");
+      setAlert({ show: true, message: "please enter value", type: "success" });
+
       const newItem = { id: new Date().getTime().toString(), title: name };
       setList([...list, newItem]);
       setName("");
@@ -45,7 +46,7 @@ function App() {
   return (
     <section className="section-center">
       <form className="grocery-form" onSubmit={submitHandler}>
-        {alert.show && <Alert {...alert}  removeAlert={showAlert}/>}
+        {alert.show && <Alert {...alert} removeAlert={showAlert} />}
         <h3>grocery bud</h3>
         <div className="form-control">
           <input
@@ -66,7 +67,9 @@ function App() {
       {list.length > 0 && (
         <div className="grocery-container">
           <List items={list} />
-          <button className="clear-btn">clear Items</button>
+          <button className="clear-btn" onClick={clearList}>
+            clear Items
+          </button>
         </div>
       )}
     </section>
