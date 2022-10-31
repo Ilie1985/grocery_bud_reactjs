@@ -31,29 +31,39 @@ function App() {
     );
   };
 
+  const editItem = (id) => {
+    const specificItem = list.find((item) => {
+      return item.id === id;
+    });
+    setIsEditing(true);
+    setEditID(id);
+    setName(specificItem.title);
+  };
 
-
-
-
-
-
-
-
-  
   const submitHandler = (e) => {
     e.preventDefault();
 
     if (!name) {
-      //display alert
       showAlert(true, "danger", "please enter value");
       setAlert({ show: true, message: "please enter value", type: "danger" });
     } else if (name && isEditing) {
-      //deal with edit
-    } else {
-      //show alert
+      setList(
+        list.map((item) => {
+          if (item.id === editID) {
+            return { ...item, title: name };
+          }
 
+          return item;
+        })
+      );
+
+      setName("");
+      setEditID(null);
+      setIsEditing(false);
+      showAlert(true, "success", "value Changed");
+    } else {
       showAlert(true, "success", "item added to the list");
-      setAlert({ show: true, message: "please enter value", type: "success" });
+      
 
       const newItem = { id: new Date().getTime().toString(), title: name };
       setList([...list, newItem]);
@@ -84,7 +94,7 @@ function App() {
 
       {list.length > 0 && (
         <div className="grocery-container">
-          <List items={list} removeItem={removeItem} />
+          <List items={list} removeItem={removeItem} editItem={editItem} />
           <button className="clear-btn" onClick={clearList}>
             clear Items
           </button>
